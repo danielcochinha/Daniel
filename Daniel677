@@ -1,0 +1,125 @@
+-- Soxcy Simple Reduce GUI + FPS Only
+local Players = game:GetService("Players")
+local lp = Players.LocalPlayer
+local RunService = game:GetService("RunService")
+local gui = Instance.new("ScreenGui")
+gui.Name = "SoxcyReduceGUI"
+gui.ResetOnSpawn = false
+gui.Parent = game.CoreGui
+
+-- Main Frame
+local main = Instance.new("Frame")
+main.Size = UDim2.new(0, 220, 0, 120)
+main.Position = UDim2.new(0.5, -110, 0.5, -60)
+main.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+main.BorderSizePixel = 0
+main.Active = true
+main.Draggable = true
+main.Parent = gui
+
+local corner = Instance.new("UICorner", main)
+corner.CornerRadius = UDim.new(0, 10)
+
+-- Title
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, 0, 0, 30)
+title.BackgroundTransparency = 1
+title.Text = " cerolzera67 🤖"
+title.Font = Enum.Font.GothamBold
+title.TextSize = 18
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.Parent = main
+
+-- FPS Label (tengah bawah title)
+local fpsLabel = Instance.new("TextLabel")
+fpsLabel.Size = UDim2.new(1, 0, 0, 20)
+fpsLabel.Position = UDim2.new(0, 0, 0, 35)
+fpsLabel.BackgroundTransparency = 1
+fpsLabel.Text = "FPS: 0"
+fpsLabel.Font = Enum.Font.GothamBold
+fpsLabel.TextSize = 14
+fpsLabel.TextColor3 = Color3.fromRGB(255, 255, 0)
+fpsLabel.TextXAlignment = Enum.TextXAlignment.Center
+fpsLabel.TextYAlignment = Enum.TextYAlignment.Center
+fpsLabel.Parent = main
+
+-- Tombol
+local button = Instance.new("TextButton")
+button.Size = UDim2.new(0.8, 0, 0, 40)
+button.Position = UDim2.new(0.1, 0, 0.6, 0)
+button.Text = "Reduce"
+button.Font = Enum.Font.GothamBold
+button.TextSize = 16
+button.TextColor3 = Color3.fromRGB(255, 255, 255)
+button.BackgroundColor3 = Color3.fromRGB(50, 150, 255)
+button.BorderSizePixel = 0
+button.Parent = main
+
+local btnCorner = Instance.new("UICorner", button)
+btnCorner.CornerRadius = UDim.new(0, 8)
+
+-- Tombol klik: jalankan FPS Booster & hapus badge/notifikasi
+button.MouseButton1Click:Connect(function()
+    button.Text = "Success!"
+    button.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
+
+    _G.Ignore = {}
+    _G.Settings = {
+        Players = {["Ignore Me"]=true,["Ignore Others"]=true,["Ignore Tools"]=true},
+        Meshes = {NoMesh=false,NoTexture=false,Destroy=false},
+        Images = {Invisible=true,Destroy=false},
+        Explosions = {Smaller=true,Invisible=false,Destroy=false},
+        Particles = {Invisible=true,Destroy=false},
+        TextLabels = {LowerQuality=true,Invisible=false,Destroy=false},
+        MeshParts = {LowerQuality=true,Invisible=false,NoTexture=false,NoMesh=false,Destroy=false},
+        Other = {
+            ["FPS Cap"]=360,
+            ["No Camera Effects"]=true,
+            ["No Clothes"]=true,
+            ["Low Water Graphics"]=true,
+            ["No Shadows"]=true,
+            ["Low Rendering"]=true,
+            ["Low Quality Parts"]=true,
+            ["Low Quality Models"]=true,
+            ["Reset Materials"]=true
+        }
+    }
+
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/CasperFlyModz/discord.gg-rips/main/FPSBooster.lua"))()
+    end)
+
+    -- Hapus semua badge/notifikasi
+    for _, gui in pairs(game.CoreGui:GetChildren()) do
+        if gui:IsA("ScreenGui") and (gui.Name:match("Badge") or gui.Name:match("Notification")) then
+            gui:Destroy()
+        end
+    end
+
+    -- Hapus notifikasi baru secara realtime
+    game.CoreGui.ChildAdded:Connect(function(child)
+        if child:IsA("ScreenGui") and (child.Name:match("Badge") or child.Name:match("Notification")) then
+            child:Destroy()
+        end
+    end)
+
+    -- Kembali ke normal setelah 3 detik
+    delay(3, function()
+        button.Text = "Reduce"
+        button.BackgroundColor3 = Color3.fromRGB(50, 150, 255)
+    end)
+end)
+
+-- FPS realtime update cepat
+local lastTime = tick()
+local frameCount = 0
+
+RunService.RenderStepped:Connect(function()
+    frameCount += 1
+    local currentTime = tick()
+    if currentTime - lastTime >= 1 then
+        fpsLabel.Text = "FPS: " .. frameCount
+        frameCount = 0
+        lastTime = currentTime
+    end
+end)
