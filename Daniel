@@ -1,118 +1,122 @@
-local Players = game:GetService("Players")
-local Lighting = game:GetService("Lighting")
-local Workspace = game:GetService("Workspace")
+– Cerolzera Aura Simple Reduce GUI + FPS Only
+local Players = game:GetService(“Players”)
+local lp = Players.LocalPlayer
+local RunService = game:GetService(“RunService”)
+local gui = Instance.new(“ScreenGui”)
+gui.Name = “CerolzeraAuraGUI”
+gui.ResetOnSpawn = false
+gui.Parent = game.CoreGui
 
-local LocalPlayer = Players.LocalPlayer
-local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+– Main Frame
+local main = Instance.new(“Frame”)
+main.Size = UDim2.new(0, 220, 0, 120)
+main.Position = UDim2.new(0.5, -110, 0.5, -60)
+main.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+main.BorderSizePixel = 0
+main.Active = true
+main.Draggable = true
+main.Parent = gui
 
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "cerolzera"
-ScreenGui.ResetOnSpawn = false
-ScreenGui.Parent = PlayerGui
+local corner = Instance.new(“UICorner”, main)
+corner.CornerRadius = UDim.new(0, 10)
 
-local MainFrame = Instance.new("Frame")
-MainFrame.Name = "MainFrame"
-MainFrame.Size = UDim2.new(0, 220, 0, 310)
-MainFrame.Position = UDim2.new(0.5, -110, 0.4, -155)
-MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-MainFrame.BorderSizePixel = 0
-MainFrame.Active = true
-MainFrame.Draggable = true
-MainFrame.Parent = ScreenGui
+– Title
+local title = Instance.new(“TextLabel”)
+title.Size = UDim2.new(1,0,0,30)
+title.BackgroundTransparency = 1
+title.Text = “ Cerolzera Aura 🤖”
+title.Font = Enum.Font.GothamBold
+title.TextSize = 18
+title.TextColor3 = Color3.fromRGB(255,255,255)
+title.Parent = main
 
-local UICorner = Instance.new("UICorner")
-UICorner.CornerRadius = UDim.new(0, 8)
-UICorner.Parent = MainFrame
+– FPS Label
+local fpsLabel = Instance.new(“TextLabel”)
+fpsLabel.Size = UDim2.new(1,0,0,20)
+fpsLabel.Position = UDim2.new(0,0,0,35)
+fpsLabel.BackgroundTransparency = 1
+fpsLabel.Text = “FPS: 0”
+fpsLabel.Font = Enum.Font.GothamBold
+fpsLabel.TextSize = 14
+fpsLabel.TextColor3 = Color3.fromRGB(255,255,0)
+fpsLabel.TextXAlignment = Enum.TextXAlignment.Center
+fpsLabel.TextYAlignment = Enum.TextYAlignment.Center
+fpsLabel.Parent = main
 
-local Title = Instance.new("TextLabel")
-Title.Name = "Title"
-Title.Size = UDim2.new(1, 0, 0, 40)
-Title.BackgroundTransparency = 1
-Title.Text = "CEROLZERA | BLOX FRUITS"
-Title.TextColor3 = Color3.fromRGB(255, 60, 60)
-Title.TextSize = 16
-Title.Font = Enum.Font.SourceSansBold
-Title.Parent = MainFrame
+– Botão
+local button = Instance.new(“TextButton”)
+button.Size = UDim2.new(0.8,0,0,40)
+button.Position = UDim2.new(0.1,0,0.6,0)
+button.Text = “Reduce”
+button.Font = Enum.Font.GothamBold
+button.TextSize = 16
+button.TextColor3 = Color3.fromRGB(255,255,255)
+button.BackgroundColor3 = Color3.fromRGB(50,150,255)
+button.BorderSizePixel = 0
+button.Parent = main
 
-local UIListLayout = Instance.new("UIListLayout")
-UIListLayout.Parent = MainFrame
-UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-UIListLayout.Padding = UDim.new(0, 8)
-UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+local btnCorner = Instance.new(“UICorner”, button)
+btnCorner.CornerRadius = UDim.new(0,8)
 
-Title.LayoutOrder = 0
+– Botão: FPS Booster
+button.MouseButton1Click:Connect(function()
+button.Text = “Success!”
+button.BackgroundColor3 = Color3.fromRGB(0,200,0)
 
-local function CreateButton(name, order, isFunctional, callback)
-	local Button = Instance.new("TextButton")
-	Button.Name = name
-	Button.Size = UDim2.new(0.85, 0, 0, 35)
-	Button.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-	Button.Text = name
-	Button.TextColor3 = Color3.fromRGB(255, 255, 255)
-	Button.TextSize = 14
-	Button.Font = Enum.Font.SourceSansSemibold
-	Button.LayoutOrder = order
-	Button.Parent = MainFrame
-
-	local BtnCorner = Instance.new("UICorner")
-	BtnCorner.CornerRadius = UDim.new(0, 6)
-	BtnCorner.Parent = Button
-
-	local isActive = false
-
-	Button.MouseButton1Click:Connect(function()
-		isActive = not isActive
-		
-		if isActive then
-			Button.BackgroundColor3 = Color3.fromRGB(60, 180, 75)
-		else
-			Button.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-		end
-
-		if isFunctional and callback then
-			callback(isActive)
-		end
-	end)
-
-	return Button
+_G.Ignore = {}
+_G.Settings = {
+    Players = {["Ignore Me"]=true,["Ignore Others"]=true,["Ignore Tools"]=true},
+    Meshes = {NoMesh=false,NoTexture=false,Destroy=false},
+    Images = {Invisible=true,Destroy=false},
+    Explosions = {Smaller=true,Invisible=false,Destroy=false},
+    Particles = {Invisible=true,Destroy=false},
+    TextLabels = {LowerQuality=true,Invisible=false,Destroy=false},
+    MeshParts = {LowerQuality=true,Invisible=false,NoTexture=false,NoMesh=false,Destroy=false},
+    Other = {
+        ["FPS Cap"]=360,
+        ["No Camera Effects"]=true,
+        ["No Clothes"]=true,
+        ["Low Water Graphics"]=true,
+        ["No Shadows"]=true,
+        ["Low Rendering"]=true,
+        ["Low Quality Parts"]=true,
+        ["Low Quality Models"]=true,
+        ["Reset Materials"]=true
+    }
+}
+pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/CasperFlyModz/discord.gg-rips/main/FPSBooster.lua"))()
+end)
+-- Remove badges/notificações
+for _, gui in pairs(game.CoreGui:GetChildren()) do
+    if gui:IsA("ScreenGui") and (gui.Name:match("Badge") or gui.Name:match("Notification")) then
+        gui:Destroy()
+    end
 end
+-- Remove novas notificações em tempo real
+game.CoreGui.ChildAdded:Connect(function(child)
+    if child:IsA("ScreenGui") and (child.Name:match("Badge") or child.Name:match("Notification")) then
+        child:Destroy()
+    end
+end)
+-- Volta ao normal após 3 segundos
+delay(3,function()
+    button.Text = "Reduce"
+    button.BackgroundColor3 = Color3.fromRGB(50,150,255)
+end)
 
-CreateButton("Auto PVP Aura", 1, false)
-CreateButton("Auto Cerol Aura", 2, false)
-CreateButton("Max Aura", 3, false)
-CreateButton("Max Cerol Aura", 4, false)
+end)
 
-local function BloxFruitsFPSBoost(enable)
-	if enable then
-		Lighting.GlobalShadows = false
-		Lighting.FogEnd = 9e9
-		
-		for _, child in pairs(Lighting:GetChildren()) do
-			if child:IsA("PostEffect") then
-				child.Enabled = false
-			end
-		end
+– FPS em tempo real
+local lastTime = tick()
+local frameCount = 0
 
-		local function CleanObject(obj)
-			if obj:IsA("BasePart") and not obj:IsA("MeshPart") then
-				obj.Material = Enum.Material.SmoothPlastic
-				obj.Reflectance = 0
-			elseif obj:IsA("Decal") or obj:IsA("Texture") then
-				obj.Transparency = 1
-			elseif obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Smoke") or obj:IsA("Fire") then
-				obj.Enabled = false
-			end
-		end
-
-		for _, obj in pairs(Workspace:GetDescendants()) do
-			CleanObject(obj)
-		end
-
-		-- Optimizes new elements spawned in the map (skill effects and attacks)
-		Workspace.DescendantAdded:Connect(function(obj)
-			CleanObject(obj)
-		end)
-	end
+RunService.RenderStepped:Connect(function()
+frameCount += 1
+local currentTime = tick()
+if currentTime - lastTime >= 1 then
+fpsLabel.Text = “FPS: “..frameCount
+frameCount = 0
+lastTime = currentTime
 end
-
-CreateButton("Optimize FPS", 5, true, BloxFruitsFPSBoost)
+end)
